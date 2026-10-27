@@ -1,0 +1,9 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, withBase, slugifyTag } from '../lib/content';
+interface Props { entries: (CollectionEntry<'writing'> | CollectionEntry<'notes'>)[] }
+const { entries } = Astro.props;
+---
+<div class="entry-list">
+{entries.map(entry => <article class="entry-row"><time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time><div><div class="eyebrow">{entry.data.maturity}</div><h2><a href={withBase(`/${entry.collection}/${entry.id}/`)}>{entry.data.title} <span aria-hidden="true">↗</span></a></h2><p>{entry.data.description}</p><div class="tag-list">{entry.data.tags.map(tag => <a href={withBase(`/tags/${slugifyTag(tag)}/`)}>{tag}</a>)}</div></div></article>)}
+</div>

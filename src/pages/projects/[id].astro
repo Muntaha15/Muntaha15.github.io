@@ -1,0 +1,9 @@
+---
+import { render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { getPublicProjects } from '../../lib/content';
+export async function getStaticPaths() { return (await getPublicProjects()).map(entry=>({ params:{ id:entry.id },props:{entry} })); }
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+---
+<ArticleLayout {...entry.data} collection="projects" body={entry.body} headings={headings}><Content /></ArticleLayout>

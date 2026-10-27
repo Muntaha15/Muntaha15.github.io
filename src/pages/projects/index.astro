@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getPublicProjects } from '../../lib/content';
+const projects = await getPublicProjects();
+const kinds = [...new Set(projects.map(p => p.data.kind))];
+---
+<BaseLayout title="Projects" active="Projects" description="Selected projects in agentic systems, retrieval, and explainable circuit analysis.">
+  <header class="page-heading"><div class="eyebrow">Outside work</div><h1>Selected projects.</h1><p>Personal projects in agentic systems, retrieval, and circuit analysis.</p></header>
+  <div class="filter-bar" aria-label="Filter projects"><button class="filter-button" data-filter="all" aria-pressed="true">All projects <span>({projects.length})</span></button>{kinds.map(kind => <button class="filter-button" data-filter={kind} aria-pressed="false">{kind}</button>)}</div>
+  <div id="projects-list">{projects.map((project,i) => <div data-kind={project.data.kind}><ProjectCard project={project} number={i+1}/></div>)}</div>
+  <p class="sr-only" id="filter-status" role="status" aria-live="polite"></p>
+  <script>
+    document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach(button => button.addEventListener('click', () => {
+      document.querySelectorAll('[data-filter]').forEach(b => b.setAttribute('aria-pressed',String(b === button)));
+      let count = 0; document.querySelectorAll<HTMLElement>('[data-kind]').forEach(row => {row.hidden = button.dataset.filter !== 'all' && row.dataset.kind !== button.dataset.filter; if(!row.hidden) count++;});
+      const status = document.getElementById('filter-status'); if(status) status.textContent = `${count} ${count === 1 ? 'project' : 'projects'} shown`;
+    }));
+  </script>
+</BaseLayout>

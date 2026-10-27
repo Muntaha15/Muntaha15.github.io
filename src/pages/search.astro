@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/content';
+---
+<BaseLayout title="Search" description="Search Muntaha Kamal’s portfolio.">
+  <header class="page-heading"><div class="eyebrow">Find something</div><h1>Search the site.</h1><p>Find a project or technical topic. Try “retrieval”, “graphs”, or “language models”.</p></header>
+  <div class="search-wrap"><div id="search" data-bundle={withBase('/pagefind/')} data-base={withBase('/')}></div><p id="search-status" class="search-hint" role="status">Loading search…</p><p id="search-recovery" class="search-hint" hidden>Try again or <a class="text-link" href={withBase('/tags/')}>browse all topics</a>.</p><noscript><p>Search needs JavaScript. You can also <a class="text-link" href={withBase('/tags/')}>browse all topics</a>.</p></noscript></div>
+  <script>
+    const container=document.querySelector<HTMLElement>('#search');
+    const status=document.querySelector<HTMLElement>('#search-status');
+    const recovery=document.querySelector<HTMLElement>('#search-recovery');
+    if(container){const path=container.dataset.bundle!; const css=document.createElement('link');css.rel='stylesheet';css.href=`${path}pagefind-ui.css`;document.head.append(css);const script=document.createElement('script');script.src=`${path}pagefind-ui.js`;script.onload=()=>{const UI=(window as unknown as {PagefindUI:new(options:Record<string,unknown>)=>unknown}).PagefindUI;new UI({element:'#search',showSubResults:true,bundlePath:path,baseUrl:container.dataset.base,showImages:false,resetStyles:false});if(status)status.hidden=true;};script.onerror=()=>{if(status)status.textContent=import.meta.env.DEV?'Search is available in the production preview. Run npm run build, then npm run preview.':'Search couldn’t load.';if(recovery)recovery.hidden=false;};document.head.append(script);}
+  </script>
+</BaseLayout>

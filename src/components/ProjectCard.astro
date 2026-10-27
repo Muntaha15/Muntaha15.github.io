@@ -1,0 +1,18 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProjectArt from './ProjectArt.astro';
+import { withBase, slugifyTag } from '../lib/content';
+interface Props { project: CollectionEntry<'projects'>; number?: number; headingLevel?: 'h2' | 'h3' }
+const { project, number, headingLevel = 'h2' } = Astro.props;
+const Heading = headingLevel;
+---
+<article class="project-row">
+  <a class="project-image-link" href={withBase(`/projects/${project.id}/`)} tabindex="-1" aria-hidden="true"><ProjectArt id={project.id}/></a>
+  <div class="project-info">
+    <div class="eyebrow">{number ? `${String(number).padStart(2, '0')} / ` : ''}{project.data.kind}</div>
+    <Heading class="project-title"><a href={withBase(`/projects/${project.id}/`)}>{project.data.title}<span class="inline-arrow" aria-hidden="true">↗</span></a></Heading>
+    <p>{project.data.description}</p>
+    <div class="tag-list">{project.data.tags.slice(0, 4).map(tag => <a href={withBase(`/tags/${slugifyTag(tag)}/`)}>{tag}</a>)}</div>
+  </div>
+  <a class="project-code" href={project.data.repo} aria-label={`View ${project.data.title} code on GitHub`}>Code ↗</a>
+</article>

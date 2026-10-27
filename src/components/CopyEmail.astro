@@ -1,0 +1,54 @@
+---
+import { site } from '../data/site';
+---
+<span class="copy-email">
+  <button class="text-link" type="button" data-copy-email={site.email}>Copy email</button>
+  <span class="copy-email-status" role="status" aria-live="polite" aria-atomic="true"></span>
+  <noscript><span class="email-address">{site.email}</span></noscript>
+</span>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-email]').forEach(button => {
+    const status = button.nextElementSibling as HTMLElement;
+    let timeout: ReturnType<typeof setTimeout>;
+    button.addEventListener('click', async () => {
+      clearTimeout(timeout);
+      status.textContent = '';
+      try {
+        await navigator.clipboard.writeText(button.dataset.copyEmail!);
+        status.textContent = 'Copied!';
+        timeout = setTimeout(() => { status.textContent = ''; }, 2200);
+      } catch {
+        status.textContent = `Couldn’t copy. Email: ${button.dataset.copyEmail}`;
+      }
+    });
+  });
+</script>
+
+<style>
+  .email-address { overflow-wrap: anywhere; }
+  button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+  }
+  button:hover { color: var(--accent); }
+  .copy-email-status:not(:empty) {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    width: max-content;
+    max-width: calc(100vw - 32px);
+    overflow-wrap: anywhere;
+    padding: 12px 20px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    font: 14px/1.5 var(--sans);
+    box-shadow: 0 4px 20px #0002;
+  }
+</style>

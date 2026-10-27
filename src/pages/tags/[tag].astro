@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import EntryList from '../../components/EntryList.astro';
+import { getPublicProjects, getPublicWriting, getPublicNotes, slugifyTag, withBase } from '../../lib/content';
+export async function getStaticPaths() { const entries=[...await getPublicProjects(),...await getPublicWriting(),...await getPublicNotes()]; return [...new Set(entries.flatMap(e=>e.data.tags))].map(tag=>({params:{tag:slugifyTag(tag)},props:{tag}})); }
+const {tag}=Astro.props;
+const projects=(await getPublicProjects()).filter(p=>p.data.tags.includes(tag));
+const entries=[...await getPublicWriting(),...await getPublicNotes()].filter(p=>p.data.tags.includes(tag)).sort((a,b)=>b.data.date.getTime()-a.data.date.getTime());
+---
+<BaseLayout title={tag}><a class="back-link" href={withBase('/tags/')}>← All topics</a><header class="page-heading"><div class="eyebrow">Topic</div><h1>{tag}</h1><p>{projects.length+entries.length} {(projects.length+entries.length)===1?'entry':'entries'} in this portfolio.</p></header>{projects.map(project=><ProjectCard project={project}/>)}<EntryList entries={entries}/></BaseLayout>

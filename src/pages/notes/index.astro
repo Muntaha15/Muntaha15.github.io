@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EntryList from '../../components/EntryList.astro';
+import { getPublicNotes, withBase } from '../../lib/content';
+const entries = await getPublicNotes();
+---
+<BaseLayout title="Notes" active="Notes" description={entries.length ? 'My AI and ML study notes, references, and questions.' : 'No notes published yet. Explore my project topics.'} noindex={!entries.length}>
+  <header class="page-heading"><div class="eyebrow">Learning</div><h1>Notes.</h1>{entries.length > 0 && <p>Concepts I’m studying, useful references, and questions I’m still working through.</p>}<div class="link-group"><a class="text-link" href={withBase('/tags/')}>Browse topics ↗</a>{entries.length > 0 && <a class="text-link" href={withBase('/notes/feed.xml')}>Notes RSS ↗</a>}</div></header>
+  {entries.length ? <EntryList entries={entries}/> : <div class="empty-state"><span class="empty-mark" aria-hidden="true">↳</span><h2>No notes published yet.</h2><p>You can explore the topics covered by my current projects.</p></div>}
+</BaseLayout>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">Current-mirror connections from the test fixture</title>
+  <desc id="desc">R_BIAS connects VDD to VDD_BIAS. M_REF has drain and gate tied to VDD_BIAS, which also drives M_OUT's gate. M_OUT's drain connects separately to IOUT. Both NMOS sources and bulks connect to VSS.</desc>
+  <rect width="720" height="420" rx="8" fill="#f7f5ef"/>
+  <g fill="none" stroke="#38433d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M250 42v22m-8 0h16v48h-16V64m8 48v88"/>
+    <path d="M180 230v-90h320v90h25M180 230h45"/>
+    <path d="M225 200v60m10-60v60m0-50h15v-10m-15 50h15v10m0 0v100h300V260"/>
+    <path d="M525 200v60m10-60v60m0-50h15v-30h70V75m-85 175h15v10"/>
+    <path d="M400 360v18m-15 0h30m-25 7h20m-15 7h10"/>
+  </g>
+  <circle cx="250" cy="140" r="4.5" fill="#41755b"/>
+  <g fill="#38433d" font-family="system-ui, sans-serif" font-size="17">
+    <text x="230" y="29">VDD</text>
+    <text x="275" y="85">R_BIAS · 10k</text>
+    <text x="345" y="126" fill="#41755b">VDD_BIAS</text>
+    <text x="598" y="61">IOUT</text>
+    <text x="270" y="231">M_REF</text>
+    <text x="570" y="231">M_OUT</text>
+    <text x="270" y="254" font-size="14">drain = gate</text>
+    <text x="430" y="383">VSS</text>
+    <text x="44" y="325" font-size="14">Both devices: NMOS</text>
+    <text x="44" y="346" font-size="14">W = 5 µm · L = 500 nm</text>
+    <text x="44" y="393" font-size="14">Bulk connections to VSS are omitted for clarity.</text>
+  </g>
+</svg>

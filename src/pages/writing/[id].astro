@@ -1,0 +1,10 @@
+---
+import { render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { getPublicWriting, getPublicProjects } from '../../lib/content';
+export async function getStaticPaths() { return (await getPublicWriting()).map(entry=>({params:{id:entry.id},props:{entry}})); }
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const related = (await getPublicProjects()).filter(p=>entry.data.relatedProjects.includes(p.id)).map(p=>({title:p.data.title,href:`/projects/${p.id}/`}));
+---
+<ArticleLayout {...entry.data} collection="writing" body={entry.body} headings={headings} related={related}><Content /></ArticleLayout>

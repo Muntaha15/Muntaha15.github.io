@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+import 'katex/dist/katex.min.css';
+import CopyEmail from '../components/CopyEmail.astro';
+import { site } from '../data/site';
+import { withBase, getPublicWriting, getPublicNotes } from '../lib/content';
+interface Props { title?: string; description?: string; active?: string; article?: boolean; noindex?: boolean }
+const { title, description = site.description, active = '', article = false, noindex = false } = Astro.props;
+const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — AI engineer`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const socialImage = new URL(withBase('/social.png'), Astro.site);
+const links = [['Home', '/'], ['Projects', '/projects/'], ['About', '/about/']];
+const [writing, notes] = await Promise.all([getPublicWriting(), getPublicNotes()]);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    {writing.length > 0 && <link rel="alternate" type="application/rss+xml" title="Muntaha Kamal — Writing" href={withBase('/feed.xml')} />}
+    {notes.length > 0 && <link rel="alternate" type="application/rss+xml" title="Muntaha Kamal — Notes" href={withBase('/notes/feed.xml')} />}
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Muntaha Kamal — AI engineer. Professional experience and personal projects." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={socialImage} />
+    <script is:inline>
+      try { const saved = localStorage.getItem('theme'); document.documentElement.dataset.theme = saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch { document.documentElement.dataset.theme = 'light'; }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="site-shell">
+      <header class="site-header" data-pagefind-ignore>
+        <a class="wordmark" href={withBase('/')} aria-label="Muntaha Kamal, home">mk<span class="wordmark-dot">.</span></a>
+        <nav aria-label="Main navigation">
+          {links.map(([label, href]) => <a href={withBase(href)} aria-current={active === label ? 'page' : undefined}>{label}</a>)}
+        </nav>
+        <div class="header-actions">
+          <a class="icon-button" href={withBase('/search/')} aria-label="Search the site"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></a>
+          <button class="icon-button theme-toggle" type="button" aria-label="Switch color theme" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4 8.2 8.2 0 1 0 20 14.2Z"/></svg></button>
+        </div>
+      </header>
+      <main id="main" tabindex="-1"><slot /></main>
+      <footer class="site-footer" data-pagefind-ignore>
+        <div><a class="footer-name" href={withBase('/')}>Muntaha Kamal</a><p>AI engineer · Personal projects</p></div>
+        <div class="footer-links"><a href={site.github}>GitHub ↗</a><a href={site.linkedin}>LinkedIn ↗</a><CopyEmail /></div>
+        <div class="footer-bottom"><span>© {new Date().getFullYear()} Muntaha Kamal</span></div>
+      </footer>
+    </div>
+    <script>
+      const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
+      const update = () => { const dark = document.documentElement.dataset.theme === 'dark'; button?.setAttribute('aria-pressed', String(dark)); button?.setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} theme`); };
+      update();
+      button?.addEventListener('click', () => { const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = theme; try { localStorage.setItem('theme', theme); } catch {} update(); });
+      matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => { try { if (localStorage.getItem('theme')) return; } catch {} document.documentElement.dataset.theme = event.matches ? 'dark' : 'light'; update(); });
+    </script>
+  </body>
+</html>

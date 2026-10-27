@@ -1,0 +1,39 @@
+---
+interface Props { id: string }
+const { id } = Astro.props;
+const type = id.includes('analog') ? 'circuit' : id.includes('commitecho') ? 'git' : 'graph';
+---
+<div class={`project-art art-${type}`} aria-hidden="true">
+  <svg viewBox="0 0 240 156" fill="none">
+    {type === 'git' ? <>
+      <path class="art-line" d="M32 54h176M58 54c15 0 20 40 38 40h50c18 0 23-40 40-40" />
+      <path class="art-line" stroke-dasharray="2 2" d="M146 104v16" />
+      <circle class="art-node" cx="58" cy="54" r="5" />
+      <circle class="art-node" cx="122" cy="54" r="5" />
+      <circle class="art-node" cx="186" cy="54" r="6" />
+      <circle class="art-node" cx="96" cy="94" r="5" />
+      <circle class="art-node" cx="146" cy="94" r="6" />
+      <circle class="art-mark" cx="146" cy="94" r="12" stroke-dasharray="2 3" />
+      <circle class="art-mark" cx="146" cy="94" r="18" stroke-dasharray="3 4" opacity="0.4" />
+      <rect class="art-cell" x="122" y="120" width="48" height="16" rx="3" />
+      <text x="128" y="132" class="art-label" style="font-size: 9px; letter-spacing: 0.5px;">RECORD</text>
+      <text x="32" y="40" class="art-label" style="font-size: 10px;">main</text>
+      <text x="180" y="40" class="art-label" style="font-size: 10px;">HEAD</text>
+      <text x="76" y="112" class="art-label" style="font-size: 8px;">linked decision</text>
+    </> : type === 'graph' ? <>
+      <path class="art-line" d="m75 38 40-14 18 46-58-32m58 32-48 37 36 26 12-63m0 0 43-37 26 37-69 0m0 0 44 41 25-41m-25 41-56 22m56-22 35 18M85 107l-28 23" />
+      <path class="art-line" stroke-dasharray="3 4" d="M42 69Q58 65 75 38M42 79Q58 93 85 107" />
+      <rect class="art-node" x="19" y="54" width="23" height="31" rx="3" />
+      <path class="art-mark" d="M25 62h11m-11 7h11m-11 7h7" />
+      <circle class="art-node" cx="75" cy="38" r="8"/><circle class="art-node" cx="115" cy="24" r="5"/>
+      <circle class="art-node" cx="133" cy="70" r="11"/><circle class="art-node" cx="85" cy="107" r="8"/>
+      <circle class="art-node" cx="121" cy="133" r="5"/><circle class="art-node" cx="176" cy="33" r="6"/>
+      <circle class="art-node" cx="202" cy="70" r="8"/><circle class="art-node" cx="177" cy="111" r="9"/>
+      <circle class="art-node" cx="212" cy="129" r="4"/><circle class="art-node" cx="57" cy="130" r="4"/>
+    </> : type === 'circuit' ? <>
+      <path class="art-line" d="M56 26h20v34m88-34v34M76 98v28h88V98M49 79h12m15-31H61v31m0 0V40h82v39M76 68v22m88-22v22M68 59v39m88-39v39M68 66h8m-8 25h8m80-25h8m-8 25h8M143 59v39M120 126v13m-12 0h24m-19 5h14"/>
+      <circle class="art-node" cx="76" cy="26" r="4"/><circle class="art-node" cx="164" cy="26" r="4"/><circle class="art-node" cx="61" cy="79" r="4"/>
+      <text x="85" y="80" class="art-label">M₁</text><text x="173" y="80" class="art-label">M₂</text>
+    </> : null}
+  </svg>
+</div>

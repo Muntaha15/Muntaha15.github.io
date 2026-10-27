@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import CopyEmail from '../components/CopyEmail.astro';
+import { getPublicProjects, withBase } from '../lib/content';
+import { site } from '../data/site';
+const projects = (await getPublicProjects()).filter(p => p.data.featured).slice(0, 3);
+---
+<BaseLayout active="Home">
+  <section class="hero" aria-labelledby="intro-title" data-pagefind-body>
+    <div>
+      <div class="eyebrow"><span class="status-dot" aria-hidden="true"></span>AI engineer · IIT Delhi alumnus</div>
+      <h1 id="intro-title">Hi, I’m <em>Muntaha.</em></h1>
+      <p class="hero-lead">I build machine learning and deep learning models, and AI applications.</p>
+      <p class="hero-note">From predictive modeling and manufacturing analytics at Micron to LLM applications at Tata Electronics, my work spans data science and AI engineering, primarily in the semiconductor industry.</p>
+      <div class="link-group"><a class="text-link" href={withBase('/about/')}>About me <span aria-hidden="true">↗</span></a><a class="text-link" href={withBase(site.resume)}>Résumé <span aria-hidden="true">↓</span></a><a class="text-link" href={site.github}>GitHub <span aria-hidden="true">↗</span></a><a class="text-link" href={site.linkedin}>LinkedIn <span aria-hidden="true">↗</span></a><CopyEmail /></div>
+    </div>
+    <aside class="hero-aside" aria-label="Background">
+      <div class="aside-item"><div class="eyebrow">Currently</div><strong>Tata Electronics</strong><span>AI Engineer</span></div>
+      <div class="aside-item"><div class="eyebrow">Previously</div><strong>Micron Technology</strong><span>Data Scientist</span></div>
+      <div class="aside-item"><div class="eyebrow">Education</div><strong>IIT Delhi</strong><span>Production & Industrial Engineering</span></div>
+    </aside>
+  </section>
+  <section class="section" aria-labelledby="experience-title" data-pagefind-body>
+    <div class="section-heading"><h2 id="experience-title"><span class="section-number">01</span>Experience</h2><a class="text-link" href={withBase('/about/#experience-title')}>Full background ↗</a></div>
+    <div class="work-summary">
+      <article><h3>Tata Electronics</h3><p class="work-role">AI Engineer · Assistant Manager · December 2025 – Present</p><p>Built a GraphRAG-based learning platform that turns technical documentation into department-specific learning modules. I selected the retrieval approach and developed ingestion pipelines for text, tables, and images, with retrieval scoped to selected source documents.</p></article>
+      <article><h3>Micron Technology</h3><p class="work-role">Data Scientist I → II · June 2022 – November 2025</p><p>Built predictive models for NAND memory reliability and engineering decision support, alongside manufacturing-data analysis, shared modeling tools, and cloud data workflows. My decision-support work shortened engineering review by about 14 days.</p></article>
+    </div>
+  </section>
+  <section class="section" aria-labelledby="work-title">
+    <div class="section-heading"><h2 id="work-title"><span class="section-number">02</span>Selected projects</h2><a class="text-link" href={withBase('/projects/')}>All projects ↗</a></div>
+    {projects.map((project, i) => <ProjectCard project={project} number={i+1} headingLevel="h3"/>)}
+  </section>
+</BaseLayout>

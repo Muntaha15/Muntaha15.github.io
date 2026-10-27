@@ -1,0 +1,7 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublicProjects, getPublicWriting, getPublicNotes, slugifyTag, withBase } from '../../lib/content';
+const entries = [...await getPublicProjects(),...await getPublicWriting(),...await getPublicNotes()];
+const tags = [...new Set(entries.flatMap(e=>e.data.tags))].sort();
+---
+<BaseLayout title="Topics"><header class="page-heading"><div class="eyebrow">Follow a thread</div><h1>Explore by topic.</h1><p>Browse the technical topics covered in this portfolio.</p></header><div class="tags-index">{tags.map(tag=><a class="topic-card" href={withBase(`/tags/${slugifyTag(tag)}/`)}>{tag}<span>{entries.filter(e=>e.data.tags.includes(tag)).length} ↗</span></a>)}</div></BaseLayout>
